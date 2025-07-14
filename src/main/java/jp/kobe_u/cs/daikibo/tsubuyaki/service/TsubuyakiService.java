@@ -1,17 +1,29 @@
+package jp.kobe_u.cs.daikibo.tsubuyaki.service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import jp.kobe_u.cs.daikibo.tsubuyaki.entity.Tsubuyaki;
+import jp.kobe_u.cs.daikibo.tsubuyaki.repository.TsubuyakiRepository;
+
 @Service
 public class TsubuyakiService {
     @Autowired
     TsubuyakiRepository repo; // レポジトリ
     // つぶやきを投稿
+
     public Tsubuyaki postTsubuyaki(Tsubuyaki t) {
-        //名前がない場合の業務ロジック
+        // 名前がない場合の業務ロジック
         String name = t.getName();
-        if (name==null || name.length()==0) {
+        if (name == null || name.length() == 0) {
             t.setName("名無しさん");
         }
-        t.setCreatedAt(new Date());  //作成日時をセット
-        return repo.save(t); //セーブしたオブジェクトを返却
+        t.setCreatedAt(LocalDateTime.now()); // 作成日時をセット
+        return repo.save(t); // セーブしたオブジェクトを返却
     }
+
     // 全つぶやきを取得
     public List<Tsubuyaki> getAllTsubuyaki() {
         Iterable<Tsubuyaki> found = repo.findAll();
@@ -19,4 +31,4 @@ public class TsubuyakiService {
         found.forEach(list::add);
         return list;
     }
- }
+}
