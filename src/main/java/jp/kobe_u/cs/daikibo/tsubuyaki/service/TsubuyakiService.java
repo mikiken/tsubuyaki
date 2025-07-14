@@ -31,4 +31,9 @@ public class TsubuyakiService {
         found.forEach(list::add);
         return list;
     }
+
+    // つぶやきを検索
+    public List<Tsubuyaki> searchTsubuyaki(String keyword) {
+        return repo.findByCommentContaining(keyword);
+    }
 }

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
 @Controller
 public class TsubuyakiController {
     @Autowired
@@ -24,11 +26,17 @@ public class TsubuyakiController {
 
     // メイン画面を表示
     @GetMapping("/read")
-    String showTsubuyakiList(Model model) {
-        List<jp.kobe_u.cs.daikibo.tsubuyaki.entity.Tsubuyaki> list = ts.getAllTsubuyaki(); // 全つぶやきを取得
-        model.addAttribute("tsubuyakiList", list); // モデル属性にリストをセット
-        model.addAttribute("tsubuyakiForm", new TsubuyakiForm()); // 空フォームをセット
-        return "tsubuyaki_list"; // リスト画面を返す
+    String showTsubuyakiList(Model model,
+            @RequestParam(name = "keyword", required = false) String keyword) {
+        List<Tsubuyaki> list;
+        if (keyword != null && !keyword.isEmpty()) {
+            list = ts.searchTsubuyaki(keyword);
+        } else {
+            list = ts.getAllTsubuyaki();
+        }
+        model.addAttribute("tsubuyakiList", list);
+        model.addAttribute("tsubuyakiForm", new TsubuyakiForm());
+        return "tsubuyaki_list";
     }
 
     // つぶやきを投稿
